@@ -1,0 +1,24 @@
+{
+  "name": "google-analytics-mcp",
+  "version": "1.0.0",
+  "description": "Google Analyticsを操作するMCPサーバー",
+  "main": "server/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "keywords": [
+    "google-analytics",
+    "mcp",
+    "server"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@google-analytics/admin": "^4.2.0",
+    "@google-analytics/data": "^4.2.0",
+    "@modelcontextprotocol/sdk": "^1.15.0",
+    "minimist": "^1.2.8"
+  }
+}

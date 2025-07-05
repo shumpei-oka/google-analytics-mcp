@@ -1,0 +1,27 @@
+# Dependencies
+/node_modules
+
+# Build output
+*.dxt
+
+# Logs
+*.log
+logs
+npm-debug.log*
+yarn-debug.log*
+
+# Environment variables
+.env*
+
+# Service Account Key - IMPORTANT!
+# Do not commit your service account key file.
+# The server is configured to read the key from the path
+# provided via the extension settings UI, not from the project directory.
+# However, as a safeguard, we recommend adding your key file name here
+# if you place it within the project folder during testing.
+# Example:
+# my-secret-key.json
+*.json
+!package.json
+!package-lock.json
+!manifest.json 
