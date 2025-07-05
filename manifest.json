@@ -6,13 +6,14 @@
   "description": "A DXT extension to fetch and display data from Google Analytics.",
   "long_description": "This extension brings the power of Google Analytics data analysis to Claude. Securely connect to your GA4 properties by simply specifying a service account JSON key file in the settings. You can list properties and create detailed reports with custom combinations of date ranges, metrics, and dimensions. This allows for intuitive daily site performance checks and analysis directly through chat.",
   "author": {
-    "name": "Your Name"
+    "name": "shumpei-oka",
+    "url": "https://github.com/shumpei-oka/"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/acme/my-repo"
+    "url": "https://github.com/shumpei-oka/google-analytics-mcp"
   },
-  "homepage": "http://example.com",
+  "homepage": "https://dxt-directory.dev",
   "icon": "ga-logo.svg",
   "server": {
     "type": "node",
