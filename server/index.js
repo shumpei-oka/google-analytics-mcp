@@ -36,20 +36,20 @@ class GoogleAnalyticsMCPServer {
     const keyFilePath = args["key-file"];
     if (!keyFilePath) {
       throw new Error(
-        "キーファイルパスが --key-file 引数で指定されていません。"
+        "Key file path is not specified with --key-file argument."
       );
     }
 
-    log(`キーファイルを読み込みます: ${keyFilePath}`);
+    log(`Reading key file: ${keyFilePath}`);
 
     let credentials;
     try {
       const fileContent = fs.readFileSync(keyFilePath, "utf8");
       credentials = JSON.parse(fileContent);
     } catch (error) {
-      log("キーファイルの読み込みまたは解析に失敗しました。", error);
+      log("Failed to read or parse key file.", error);
       throw new Error(
-        `キーファイルの読み込みに失敗しました: ${keyFilePath}. Error: ${error.message}`
+        `Failed to read key file: ${keyFilePath}. Error: ${error.message}`
       );
     }
 
@@ -59,27 +59,26 @@ class GoogleAnalyticsMCPServer {
     });
 
     this.defaultPropertyId = args["property-id"] || null;
-    log(`デフォルトのプロパティIDを設定しました: ${this.defaultPropertyId}`);
+    log(`Default property ID set to: ${this.defaultPropertyId}`);
   }
 
   setupToolHandlers() {
     const tools = [
       {
         name: "list_properties",
-        description:
-          "アクセス可能なGoogle Analyticsのプロパティ一覧を取得します。",
+        description: "Get a list of accessible Google Analytics properties.",
         inputSchema: { type: "object", properties: {}, required: [] },
       },
       {
         name: "get_realtime_active_users",
-        description: "直近30分間のアクティブユーザー数を取得します。",
+        description: "Get the number of active users in the last 30 minutes.",
         inputSchema: {
           type: "object",
           properties: {
             propertyId: {
               type: "string",
               description:
-                "GA4プロパティID。省略時はデフォルト値が使用されます。",
+                "GA4 Property ID. If omitted, the default value will be used.",
             },
           },
           required: [],
@@ -87,18 +86,19 @@ class GoogleAnalyticsMCPServer {
       },
       {
         name: "get_daily_report",
-        description: "指定した日の合計ユーザー数とセッション数を取得します。",
+        description:
+          "Get the total number of users and sessions for a specified date.",
         inputSchema: {
           type: "object",
           properties: {
             propertyId: {
               type: "string",
               description:
-                "GA4プロパティID。省略時はデフォルト値が使用されます。",
+                "GA4 Property ID. If omitted, the default value will be used.",
             },
             date: {
               type: "string",
-              description: "日付 (YYYY-MM-DD形式、省略時は昨日)",
+              description: "Date (YYYY-MM-DD format, defaults to yesterday)",
             },
           },
           required: [],
@@ -107,32 +107,34 @@ class GoogleAnalyticsMCPServer {
       {
         name: "runReport",
         description:
-          "柔軟なパラメータを指定して、Google Analyticsのレポートを取得します。",
+          "Get a report from Google Analytics with flexible parameters.",
         inputSchema: {
           type: "object",
           properties: {
             propertyId: {
               type: "string",
               description:
-                "GA4プロパティID。省略時はデフォルト値が使用されます。",
+                "GA4 Property ID. If omitted, the default value will be used.",
             },
             startDate: {
               type: "string",
-              description: "レポートの開始日 (YYYY-MM-DD形式)",
+              description: "Start date for the report (YYYY-MM-DD format)",
             },
             endDate: {
               type: "string",
-              description: "レポートの終了日 (YYYY-MM-DD形式)",
+              description: "End date for the report (YYYY-MM-DD format)",
             },
             metrics: {
               type: "array",
               items: { type: "string" },
-              description: '取得する指標のリスト (例: ["activeUsers"])',
+              description:
+                'List of metrics to retrieve (e.g., ["activeUsers"])',
             },
             dimensions: {
               type: "array",
               items: { type: "string" },
-              description: 'レポートの分析軸のリスト (例: ["date", "country"])',
+              description:
+                'List of dimensions for the report (e.g., ["date", "country"])',
             },
           },
           required: ["startDate", "endDate", "metrics", "dimensions"],
@@ -181,7 +183,7 @@ class GoogleAnalyticsMCPServer {
     const pid = propertyId || this.defaultPropertyId;
     if (!pid) {
       throw new Error(
-        "プロパティIDが指定されていません。ツールの引数で渡すか、拡張機能設定でデフォルト値を設定してください。"
+        "Property ID is not specified. Pass it as an argument to the tool or set a default value in the extension settings."
       );
     }
     return pid;
@@ -191,10 +193,10 @@ class GoogleAnalyticsMCPServer {
     log("listProperties called.");
     try {
       const properties = [];
-      // listAccountSummariesはページ分割されたレスポンスを返すイテレータを返します。
+      // listAccountSummaries returns an iterator for paginated responses.
       const stream = this.analyticsAdminClient.listAccountSummariesAsync();
 
-      // デバッグ用にレスポンス全体をログに出力
+      // Log the entire response for debugging purposes
       console.error("Calling listAccountSummaries API...");
 
       for await (const accountSummary of stream) {
@@ -327,7 +329,7 @@ class GoogleAnalyticsMCPServer {
       await this.server.connect(transport);
       log("Google Analytics MCP Server is running.");
     } catch (error) {
-      log("致命的エラー:", error.message, error.stack);
+      log("Fatal error:", error.message, error.stack);
       process.exit(1);
     }
   }
